@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -26,16 +27,16 @@ public class MasterHW {
     public DcMotor backrightMotor = null;
     public DcMotor backleftMotor = null;
     public Servo rClaw = null;
-    public Servo lClaw = null;
-    public Servo xClaw = null;
-    public Servo xSlide = null;
-    public Servo xRotate = null;
-    public DcMotor liftMotor = null;
+   public Servo lClaw = null;
+    public Servo xDrone = null;
+    //public Servo xSlide = null;
+   // public Servo xRotate = null;
+    public DcMotor inTake = null;
     public DcMotor liftMotor2 = null;
-    public DcMotor liftMotor3 = null;
-    public NormalizedColorSensor colorR1;
+    public DcMotor liftMotor1 = null;
+   // public NormalizedColorSensor colorR1;
     public WebcamName webCam1 = null;
-    public DistanceSensor sensorRange;
+    //public DistanceSensor sensorRange;
 
 
 
@@ -43,6 +44,8 @@ public class MasterHW {
     double globalAngle, power = .30, correction;
 
     public BNO055IMU imu1 = null;
+  //public BHI260IMU imu1 = null;
+
 
     /* Initialize standard Hardware interfaces */
 
@@ -53,16 +56,17 @@ public class MasterHW {
         rightMotor = ahwMap.get(DcMotor.class, "MFrontRight");
         backleftMotor = ahwMap.get(DcMotor.class, "MBackLeft");
         backrightMotor = ahwMap.get(DcMotor.class, "MBackRight");
-        liftMotor = ahwMap.get(DcMotor.class,  "liftMotor");
+        inTake = ahwMap.get(DcMotor.class,  "MInTake");
         liftMotor2 = ahwMap.get(DcMotor.class,  "liftMotor2");
-        liftMotor3 = ahwMap.get(DcMotor.class,  "liftMotor3");
+        liftMotor1 = ahwMap.get(DcMotor.class,  "liftMotor1");
         rClaw = ahwMap.get(Servo.class, "rClaw");
         lClaw = ahwMap.get(Servo.class, "lClaw");
-        xClaw = ahwMap.get(Servo.class, "rClaw");
+        xDrone = ahwMap.get(Servo.class, "Drone");
+       /* xClaw = ahwMap.get(Servo.class, "rClaw");
         xSlide = ahwMap.get(Servo.class, "lClaw");
         xRotate = ahwMap.get(Servo.class, "xRotate");
         colorR1 =ahwMap.get(NormalizedColorSensor.class, "colorR1");
-        sensorRange =ahwMap.get(DistanceSensor.class, "d1");
+        sensorRange =ahwMap.get(DistanceSensor.class, "d1");*/
 
         // webCam1 = ahwMap.get(WebcamName.class,"webcam 1");
 
@@ -96,14 +100,14 @@ public class MasterHW {
         rightMotor.setPower(0);
         backleftMotor.setPower(0);
         backrightMotor.setPower(0);
-        //  liftMotor.setPower(0);
+        inTake.setPower(0);
         //  liftMotor2.setPower(0);
     }
 
     public void stopLiftMotors() {
-        liftMotor.setPower(0);
+        liftMotor1.setPower(0);
         liftMotor2.setPower(0);
-        liftMotor3.setPower(0);
+       // liftMotor3.setPower(0);
             }
 
     public void moveHolonomic(double x, double y , double z)
@@ -223,7 +227,7 @@ public class MasterHW {
         backrightMotor.setPower(Range.clip(backrightMotor.getPower() - 0.01, -0.3, -1.0));
     }
 
-    public void clawOpen() {
+  /*  public void clawOpen() {
         rClaw.setPosition(0.8);
         lClaw.setPosition(0.8);
 
@@ -233,5 +237,5 @@ public class MasterHW {
         lClaw.setPosition(0);
 
     }
-
+*/
 }

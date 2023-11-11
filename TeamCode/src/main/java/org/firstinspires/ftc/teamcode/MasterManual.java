@@ -40,6 +40,8 @@ public class MasterManual extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         robot.init(hardwareMap);
+        robot.lClaw.setPosition(0.4);
+        robot.rClaw.setPosition(0);
 
         //waitForStart();
         // Do not use waitForStart() if you have Motorola E4 phones.
@@ -73,28 +75,43 @@ public class MasterManual extends LinearOpMode {
             } else if (gamepad1.dpad_right) {
                 //rotate clockwise
                 robot.moveHolonomic(0, 0, motor_power * -1);
-            } else  if (gamepad2.dpad_down) {
-                //slide up
-                robot.liftMotor.setPower(slide_power);
-                robot.liftMotor2.setPower(slide_power*-1);
+            } else
+            if (gamepad2.dpad_left) {
+                robot.inTake.setPower(slide_power*-1);
+
+            }
+            else  if (gamepad2.dpad_right) {
+                robot.inTake.setPower(slide_power);
+
             }
             else  if (gamepad2.dpad_up) {
-                //slide down
-                robot.liftMotor.setPower(slide_power*-1);
+                robot.liftMotor1.setPower(slide_power);
+                robot.liftMotor2.setPower(slide_power*-1);
+
+            }
+            else  if (gamepad2.dpad_down) {
+                robot.liftMotor1.setPower(slide_power * -1);
                 robot.liftMotor2.setPower(slide_power);
             }
-            else  if (gamepad2.x) {
+         else  if (gamepad2.x) {
                 //claw open
-                robot.lClaw.setPosition(0);
+                robot.lClaw.setPosition(0.4);
                 robot.rClaw.setPosition(0);
             } else  if (gamepad2.b) {
                 //claw close
-                robot.lClaw.setPosition(0.7);
-                robot.rClaw.setPosition(0.6);
+
+                robot.rClaw.setPosition(0.4);
+                robot.lClaw.setPosition(0);
+            }
+         else if (gamepad2.y){
+             robot.xDrone.setPosition(0.4);
+            }
+            else if (gamepad2.b){
+                robot.xDrone.setPosition(0);
             }
             else{
                 robot.stopAllMotors();
-                robot.stopLiftMotors();
+               robot.stopLiftMotors();
                 // robot.colorR1.enableLed(true);
                 telemetry.update();
             }

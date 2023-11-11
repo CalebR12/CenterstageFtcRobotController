@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 public class TeleopThread extends LinearOpMode {
     MasterHW robot = new MasterHW();
     private ElapsedTime runtime = new ElapsedTime();
-    double motor_power = 0.7;
+    double motor_power = 0.3;
 
     double slide_power = 0.9;
 
@@ -43,7 +43,7 @@ public class TeleopThread extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        robot.xRotate.setPosition(0.4);
+       // robot.xRotate.setPosition(0.4);
 
         // start the driving thread.
 
@@ -61,29 +61,33 @@ public class TeleopThread extends LinearOpMode {
                 telemetry.addData("Status", "Run Time: " + runtime.toString());
                 telemetry.update();
 
-                if (gamepad2.dpad_down) {
-                    //slide down
-                    robot.liftMotor.setPower(slide_power);
-                    robot.liftMotor2.setPower(slide_power*-1);
-                    robot.liftMotor3.setPower(slide_power);
+                if (gamepad2.dpad_left) {
+                    robot.inTake.setPower(slide_power*-1);
+
+                }
+                else  if (gamepad2.dpad_right) {
+                    robot.inTake.setPower(slide_power);
+
                 }
                 else  if (gamepad2.dpad_up) {
-                    //slide up
-                    robot.liftMotor.setPower(slide_power*-1);
-                    robot.liftMotor2.setPower(slide_power);
-                    robot.liftMotor3.setPower(slide_power*-1);
+                    robot.liftMotor1.setPower(slide_power);
+
+                }
+                else  if (gamepad2.dpad_down) {
+                    robot.liftMotor1.setPower(slide_power*-1);
+
                 }
                 else  if (gamepad2.x) {
                     //claw open
                     /*robot.lClaw.setPosition(0);
                     robot.rClaw.setPosition(0);*/
-                    robot.xClaw.setPosition(0.1);
+                    //robot.xClaw.setPosition(0.1);
                 }
                 else  if (gamepad2.b) {
                     //claw close
                     /*robot.lClaw.setPosition(0.7);
-                    robot.rClaw.setPosition(0.7);*/
-                    robot.xClaw.setPosition(0.3);
+                 //   robot.rClaw.setPosition(0.7);*/
+                    //robot.xClaw.setPosition(0.3);
                 }
              /*   else  if (gamepad2.y) {
                     //claw close
@@ -104,22 +108,24 @@ public class TeleopThread extends LinearOpMode {
                     runtime.reset();
                     while (runtime.seconds() <2)
                     {
-                        robot.liftMotor.setPower(slide_power*-1);
-                        robot.liftMotor2.setPower(slide_power);
-                        robot.liftMotor3.setPower(slide_power*-1);}
+                       // robot.liftMotor.setPower(slide_power*-1);
+                       // robot.liftMotor2.setPower(slide_power);
+                       // robot.liftMotor3.setPower(slide_power*-1);
+                        }
                     }
                 else  if (gamepad2.right_bumper) {
                     runtime.reset();
                     while (runtime.seconds() <1)
                     {
-                        robot.liftMotor.setPower(slide_power*-1);
-                        robot.liftMotor2.setPower(slide_power);
-                        robot.liftMotor3.setPower(slide_power*-1);}
+                        //robot.liftMotor.setPower(slide_power*-1);
+                      //  robot.liftMotor2.setPower(slide_power);
+                       // robot.liftMotor3.setPower(slide_power*-1);
+                        }
                 }
 
                 else{
-                    // robot.stopAllMotors();
-                    robot.stopLiftMotors();
+                     robot.stopAllMotors();
+                   robot.stopLiftMotors();
 
                 }
 
