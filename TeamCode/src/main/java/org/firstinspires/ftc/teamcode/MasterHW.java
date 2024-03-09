@@ -26,17 +26,20 @@ public class MasterHW {
     public DcMotor rightMotor = null;
     public DcMotor backrightMotor = null;
     public DcMotor backleftMotor = null;
-    public Servo rClaw = null;
-   public Servo lClaw = null;
-    public Servo xDrone = null;
+    public Servo rRotate = null;
+   public Servo Claw = null;
+   public Servo rClaw = null;
+    public Servo servoArm = null;
+    public Servo Drone2 = null;
     //public Servo xSlide = null;
    // public Servo xRotate = null;
     public DcMotor inTake = null;
     public DcMotor liftMotor2 = null;
     public DcMotor liftMotor1 = null;
+    public DcMotor mHook = null;
    // public NormalizedColorSensor colorR1;
     public WebcamName webCam1 = null;
-    //public DistanceSensor sensorRange;
+    public DistanceSensor sensorRange;
 
 
 
@@ -59,14 +62,17 @@ public class MasterHW {
         inTake = ahwMap.get(DcMotor.class,  "MInTake");
         liftMotor2 = ahwMap.get(DcMotor.class,  "liftMotor2");
         liftMotor1 = ahwMap.get(DcMotor.class,  "liftMotor1");
+        mHook = ahwMap.get(DcMotor.class, "Mhook");
+        rRotate = ahwMap.get(Servo.class, "rotate");
+        Claw = ahwMap.get(Servo.class, "lClaw");
         rClaw = ahwMap.get(Servo.class, "rClaw");
-        lClaw = ahwMap.get(Servo.class, "lClaw");
-        xDrone = ahwMap.get(Servo.class, "Drone");
+        servoArm = ahwMap.get(Servo.class, "Drone");
+        Drone2 = ahwMap.get(Servo.class,"Drone2");
        /* xClaw = ahwMap.get(Servo.class, "rClaw");
         xSlide = ahwMap.get(Servo.class, "lClaw");
         xRotate = ahwMap.get(Servo.class, "xRotate");
-        colorR1 =ahwMap.get(NormalizedColorSensor.class, "colorR1");
-        sensorRange =ahwMap.get(DistanceSensor.class, "d1");*/
+        colorR1 =ahwMap.get(NormalizedColorSensor.class, "colorR1");*/
+        sensorRange =ahwMap.get(DistanceSensor.class, "d1");
 
         // webCam1 = ahwMap.get(WebcamName.class,"webcam 1");
 
@@ -100,19 +106,21 @@ public class MasterHW {
         rightMotor.setPower(0);
         backleftMotor.setPower(0);
         backrightMotor.setPower(0);
-        inTake.setPower(0);
+
         //  liftMotor2.setPower(0);
     }
 
     public void stopLiftMotors() {
         liftMotor1.setPower(0);
         liftMotor2.setPower(0);
+        inTake.setPower(0);
+        mHook.setPower(0);
        // liftMotor3.setPower(0);
             }
 
     public void moveHolonomic(double x, double y , double z)
     {
-        double max_power = 0.7;
+        double max_power = 0.9;
         double min_power = -1*max_power;
 
         double fl_power = Range.clip(y + x - z, min_power, max_power);

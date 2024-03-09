@@ -21,12 +21,12 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 //import static org.firstinspires.ftc.teamcode.Direction.ROBOT_DOWN;
 
 
-@Autonomous(name="Lsmall", group="CenterStage")
+@Autonomous(name="RedBackDrop", group="CenterStage")
 //@Disabled
 //@Disabled
 
-public class AutoFullLeft extends AutoBase{
-    SleeveDetectionLeft sleeveDetection;
+public class AutoBackDropRed extends AutoBase{
+    SleeveDetectionRed sleeveDetection;
     OpenCvCamera camera;
     @Override
     public void runOpMode() {
@@ -39,7 +39,7 @@ public class AutoFullLeft extends AutoBase{
         initHW();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        sleeveDetection = new SleeveDetectionLeft();
+        sleeveDetection = new SleeveDetectionRed(telemetry);
         camera.setPipeline(sleeveDetection);
 
 
@@ -50,25 +50,28 @@ public class AutoFullLeft extends AutoBase{
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
-        robot.lClaw.setPosition(0.4);
-        robot.rClaw.setPosition(0.0);
+        robot.rClaw.setPosition(0.25);
+        robot.rRotate.setPosition(0.7);
+        robot.Drone2.setPosition(0);
+        robot.servoArm.setPosition(0.16);
 
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+
+
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
-                camera.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
+            public void onOpened() {
+                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
-            public void onError(int errorCode) {}
+            public void onError(int errorCode) {
+            }
         });
 
-        while (!isStarted()) {
+     /* \\ while (!isStarted()) {
             telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
-            telemetry.update();
-        }
+           // telemetry.update();
+        }*/
 
         waitForStart();
 
@@ -76,12 +79,96 @@ public class AutoFullLeft extends AutoBase{
         telemetry.update();
 
         initMotorEncoders();
-        conePosition = findConePosition(sleeveDetection.getPosition());
+        conePosition = sleeveDetection.findConePosition();
         //drivePosition(conePosition);
-        //    myEncoderDrive(Direction.FORWARD, DRIVE_SPEED, 20, 10.0);
-        //  rotate(36, TURN_SPEED);
-        //  myEncoderDrive(Direction.FORWARD, DRIVE_SPEED, 19, 10.0);
-    }
+        //
+        //rotate(45,.4);
+
+        if (conePosition == 2) {
+            myEncoderDrive(Direction.FORWARD, DRIVE_SPEED, 30, 10.0);
+           // myEncoderDrive(Direction.BACKWARD, DRIVE_SPEED, 25, 2);
+            //myEncoderDrive(Direction.STRAFE_RIGHT,DRIVE_SPEED,45,3);
+            myEncoderDrive(Direction.BACKWARD,DRIVE_SPEED,7,3);
+            rotate(-80,TURN_SPEED);
+            myEncoderDrive(Direction.FORWARD,DRIVE_SPEED,29,4);
+            robot.rRotate.setPosition(0.35);
+            sleep(1000);
+            myEncoderDrive(Direction.STRAFE_LEFT,DRIVE_SPEED,5,3);
+            myEncoderDrive(Direction.FORWARD,DRIVE_SPEED,3,3);
+            sleep(1000);
+            if(robot.sensorRange.getDistance(DistanceUnit.INCH)>10)
+            {
+                myEncoderDrive(Direction.FORWARD,DRIVE_SPEED,1,3);
+
+            }
+           robot.rClaw.setPosition(0);
+            sleep(500);
+            myEncoderDrive(Direction.BACKWARD,DRIVE_SPEED,5,3);
+            robot.rRotate.setPosition(0.7);
+            sleep(1000);
+            myEncoderDrive(Direction.STRAFE_RIGHT,DRIVE_SPEED,25,3);
+
+        } else if (conePosition==3) {
+            myEncoderDrive(Direction.FORWARD, DRIVE_SPEED, 25, 10.0);
+            myEncoderDrive(Direction.STRAFE_RIGHT,DRIVE_SPEED,9,3);
+           // myEncoderDrive(Direction.BACKWARD, DRIVE_SPEED, 20, 2);
+           // myEncoderDrive(Direction.STRAFE_RIGHT,DRIVE_SPEED,30,3);
+            myEncoderDrive(Direction.BACKWARD, DRIVE_SPEED, 7, 3);
+            rotate(-80, TURN_SPEED );
+            myEncoderDrive(Direction.FORWARD, DRIVE_SPEED,24,4);
+            myEncoderDrive(Direction.STRAFE_LEFT, DRIVE_SPEED,4,4);
+            robot.rRotate.setPosition(0.35);
+            sleep(1000);
+       //     myEncoderDrive(Direction.STRAFE_LEFT,DRIVE_SPEED,4,3);
+            //myEncoderDrive(Direction.FORWARD,DRIVE_SPEED,2,3);
+            if(robot.sensorRange.getDistance(DistanceUnit.INCH)>10)
+            {
+                myEncoderDrive(Direction.FORWARD,DRIVE_SPEED,1,3);
+
+            }
+            robot.rClaw.setPosition(0);
+            sleep(500);
+            myEncoderDrive(Direction.BACKWARD,DRIVE_SPEED,5,3);
+            robot.rRotate.setPosition(0.7);
+            sleep(1000);
+            myEncoderDrive(Direction.STRAFE_RIGHT,DRIVE_SPEED,19,3);
+
+        }
+        else {
+            myEncoderDrive(Direction.FORWARD, DRIVE_SPEED, 20, 10.0);
+            rotate(45,TURN_SPEED);
+            myEncoderDrive(Direction.FORWARD, DRIVE_SPEED, 10, 10.0);
+          //  myEncoderDrive(Direction.BACKWARD, DRIVE_SPEED, 25, 10.0);
+           // rotate(-45,TURN_SPEED);
+            //myEncoderDrive(Direction.BACKWARD, DRIVE_SPEED, 5, 10.0);
+            //myEncoderDrive(Direction.STRAFE_RIGHT,DRIVE_SPEED,25,3);
+            myEncoderDrive(Direction.BACKWARD, DRIVE_SPEED, 10, 10.0);
+            rotate(-45,TURN_SPEED);
+            myEncoderDrive(Direction.FORWARD, DRIVE_SPEED, 10, 10.0);
+            rotate(-80,TURN_SPEED);
+            myEncoderDrive(Direction.FORWARD, DRIVE_SPEED, 29, 10.0);
+            robot.rRotate.setPosition(0.35);
+            sleep(1000);
+            myEncoderDrive(Direction.STRAFE_LEFT,DRIVE_SPEED,5,3);
+            myEncoderDrive(Direction.FORWARD,DRIVE_SPEED,2,3);
+            sleep(1000);
+            if(robot.sensorRange.getDistance(DistanceUnit.INCH)>10)
+            {
+                myEncoderDrive(Direction.FORWARD,DRIVE_SPEED,1,3);
+
+            }
+            robot.rClaw.setPosition(0);
+            sleep(500);
+            myEncoderDrive(Direction.BACKWARD,DRIVE_SPEED,5,3);
+            robot.rRotate.setPosition(0.7);
+            sleep(1000);
+            myEncoderDrive(Direction.STRAFE_RIGHT,DRIVE_SPEED,30,3);
+
+
+
+
+
+        }
     /*public void drivePosition(int conePosition){
         //close and lift cone
         myEncoderLift(Direction.ROBOT_UP, GEAR_SPEED, 8, 1.0);
@@ -134,13 +221,5 @@ public class AutoFullLeft extends AutoBase{
             myEncoderDrive(Direction.FORWARD, 0.7, 22, 2.0);
         }
     }*/
-    private int findConePosition (String pos){
-        int position = 3;
-        if (pos == "LEFT"){
-            position = 1;
-        } else if (pos == "CENTER"){
-            position = 2;
-        }
-        return position;
-    }
-}
+
+    }}

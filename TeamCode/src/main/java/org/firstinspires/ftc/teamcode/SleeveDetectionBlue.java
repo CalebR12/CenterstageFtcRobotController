@@ -16,14 +16,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.nio.channels.ClosedChannelException;
 
-public class SleeveDetectionRed extends OpenCvPipeline {
-   Telemetry telemetry;
-   Mat mat = new Mat();
-   public SleeveDetectionRed( Telemetry t){
-       telemetry = t;
-   }
-  static final Rect CENTER_ROI = new Rect(new Point(85, 55), new Point(115, 85));
-   static final Rect RIGHT_ROI = new Rect(new Point(260, 55), new Point(290,85));
+public class SleeveDetectionBlue extends OpenCvPipeline {
+    Telemetry telemetry;
+    Mat mat = new Mat();
+    public SleeveDetectionBlue( Telemetry t){
+        telemetry = t;
+    }
+    static final Rect CENTER_ROI = new Rect(new Point(85, 55), new Point(115, 85));
+    static final Rect RIGHT_ROI = new Rect(new Point(260, 55), new Point(290,85));
     public enum ParkingPosition {
         LEFT,
         CENTER,
@@ -92,33 +92,33 @@ public class SleeveDetectionRed extends OpenCvPipeline {
         telemetry.addData("Left percent ",Math.round(leftValue*100)+ "%");
         telemetry.addData("Right percent ",Math.round(rightValue*100)+ "%");*/
 
-        boolean stonecenter = ((sumColors.val[0] > sumColors.val[1]) && (sumColors.val[0] > sumColors.val[2]));
-        boolean stoneright = ((sumColorsR.val[0] > sumColorsR.val[1]) && (sumColorsR.val[0] > sumColorsR.val[2]));
+        boolean stonecenter = ((sumColors.val[2] > sumColors.val[0]) && (sumColors.val[2] > sumColors.val[1]));
+        boolean stoneright = ((sumColorsR.val[2] > sumColorsR.val[0]) && (sumColorsR.val[2] > sumColorsR.val[1]));
 
        /* if (stoneleft && stoneright) {
             position = ParkingPosition.RIGHT;
             telemetry.addData("Location is ", "RIGHT");
         } */
-       if (stonecenter) {
-           position = ParkingPosition.CENTER;
-           telemetry.addData("Location is ", "CENTER");
-       }
-       else if (stoneright) {
-           position = ParkingPosition.RIGHT;
-           telemetry.addData("Location is ", "RIGHT");
-       }
-       else {
-           position = ParkingPosition.LEFT;
-           telemetry.addData("Location is ", "LEFT");
-       }
-       telemetry.update();
+        if (stonecenter) {
+            position = ParkingPosition.CENTER;
+            telemetry.addData("Location is ", "CENTER");
+        }
+        else if (stoneright) {
+            position = ParkingPosition.RIGHT;
+            telemetry.addData("Location is ", "RIGHT");
+        }
+        else {
+            position = ParkingPosition.LEFT;
+            telemetry.addData("Location is ", "LEFT");
+        }
+        telemetry.update();
 
-Imgproc.cvtColor(mat,mat,Imgproc.COLOR_GRAY2RGB);
-Scalar colorstone = new Scalar(255,0,0);
-Scalar foundstone = new Scalar(0,255,0);
+        Imgproc.cvtColor(mat,mat,Imgproc.COLOR_GRAY2RGB);
+        Scalar colorstone = new Scalar(255,0,0);
+        Scalar foundstone = new Scalar(0,255,0);
 
-       Imgproc.rectangle(input,CENTER_ROI, position == ParkingPosition.CENTER? foundstone:colorstone );
-       Imgproc.rectangle(input,RIGHT_ROI, position == ParkingPosition.RIGHT? foundstone:colorstone );
+        Imgproc.rectangle(input,CENTER_ROI, position == ParkingPosition.CENTER? foundstone:colorstone );
+        Imgproc.rectangle(input,RIGHT_ROI, position == ParkingPosition.RIGHT? foundstone:colorstone );
 
         return input;
     }
@@ -126,7 +126,7 @@ Scalar foundstone = new Scalar(0,255,0);
     // Returns an enum being the current position where the robot will park
     public String getPosition() {
         return position.toString();
-       // return ColorV;
+        // return ColorV;
     }
 
 

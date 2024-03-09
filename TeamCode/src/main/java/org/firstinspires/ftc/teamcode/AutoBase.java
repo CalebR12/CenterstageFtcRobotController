@@ -39,19 +39,7 @@ public class AutoBase extends LinearOpMode
     double ref_angle = 0;
     private static final String TFOD_MODEL_ASSET = "PowerPlay.tflite";
 
-    private static final String[] LABELS = {
-            "1 Bolt",
-            "2 Bulb",
-            "3 Panel"
-    };
-    private static final String VUFORIA_KEY =
-            "AfNvNzD/////AAABmaY5K7CHKE0Vpd4OKdYdY/whEC9BoOP/IhnOxwXqc7dAv43s6ul/hPZYB+Nwgg6Q16wabUlzV8jA60s3xJdjZNOW340jc1Yq4RsPv//Cxix0+OQ6h5nxJpvBxNj5FpIaCR2d/HfZXsRWzD+3RlXHgaqaUx4XI+8qQ7MMRPXDfFMXSA+tI2NbWIwqZ9hagR+GqelWHD5L+ePW7qsXbuARx4T1XwEeIhLSCiuiK2BAgHVRTVLEXHPHCfy1vJb4BG8ou9NK2a5ywXmUHSmsqQO0TmqlZqZxzbpTS/Lx4jCBfkurU7jmmC3eJIon6hf583RkIxzWaClfjj/ZGY70vvGFa0uxATJOtGGTu1JrGTtBOwtb";
-
-    //private VuforiaLocalizer vuforia;
-    //private TFObjectDetector tfod;
-
-
-    static final double WHEEL_PERM = 11.873743682;
+       static final double WHEEL_PERM = 11.873743682;
     static final double COUNTS_PER_MOTOR_REV = 537.7; //383.6
     static final double COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV/WHEEL_PERM;
 
@@ -230,68 +218,7 @@ public class AutoBase extends LinearOpMode
     }
 
 
-    public int getConePosition(double timeoutS)
-    {
-        int l_position = 3;
-        runtime.reset();
-
-        while (opModeIsActive() &&
-                (runtime.seconds() < timeoutS)) {
-            if (tfod != null) {
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    if (updatedRecognitions.size() >= 2) {
-                        String im1 = null;
-                        String im2 = null;
-                        String im3 = null;
-                        for (Recognition recognition : updatedRecognitions) {
-
-                            if (im1 == null) {
-                                im1 = recognition.getLabel();
-                            } else if (im2 == null) {
-                                im2 = recognition.getLabel();
-                            } else if (im3 == null){
-                                im3 = recognition.getLabel();
-                            }
-                        }
-                        telemetry.addData("# Object 1 ", im1);
-                        telemetry.addData("# Object 2 ", im2);
-                        telemetry.addData("# Object 3 ", im3);
-                        telemetry.update();
-                        if (im1 != null) {
-                            if (im1.equals("1 Bolt")) {
-                                l_position = 1;
-                            }else if(im1.equals("2 Bulb")) {
-                                l_position = 2;
-                            }
-                            break;
-                        }
-                        if (im2 != null) {
-                            if (im1.equals("1 Bolt")) {
-                                l_position = 1;
-                            } else if (im1.equals("2 Bulb")) {
-                                l_position = 2;
-                            }
-                            break;
-                        }
-                        if (im3 != null) {
-                            if (im1.equals("1 Bolt")) {
-                                l_position = 1;
-                            } else if (im1.equals("2 Bulb")) {
-                                l_position = 2;
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        return l_position;
-    }
-
-
-    public void myEncoderDrive(Direction direction, double speed, double Inches, double timeoutS) {
+      public void myEncoderDrive(Direction direction, double speed, double Inches, double timeoutS) {
         int newLeftTarget = 0;
         int newRightTarget = 0;
         int newLeftBackTarget = 0;

@@ -1,10 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.location.Location;
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.checkerframework.checker.units.qual.C;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -12,18 +8,16 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import java.nio.channels.ClosedChannelException;
 
-public class SleeveDetectionRed extends OpenCvPipeline {
-   Telemetry telemetry;
-   Mat mat = new Mat();
-   public SleeveDetectionRed( Telemetry t){
-       telemetry = t;
-   }
-  static final Rect CENTER_ROI = new Rect(new Point(85, 55), new Point(115, 85));
-   static final Rect RIGHT_ROI = new Rect(new Point(260, 55), new Point(290,85));
+public class SleeveDetBlueBackDrop extends OpenCvPipeline {
+    Telemetry telemetry;
+    Mat mat = new Mat();
+    public SleeveDetBlueBackDrop( Telemetry t){
+        telemetry = t;
+    }
+    static final Rect CENTER_ROI = new Rect(new Point(165, 55), new Point(195, 85));
+    static final Rect LEFT_ROI = new Rect(new Point(25, 55), new Point(55,85));
     public enum ParkingPosition {
         LEFT,
         CENTER,
@@ -51,11 +45,11 @@ public class SleeveDetectionRed extends OpenCvPipeline {
         Core.inRange(mat, lowHsv,highHsv,mat);
 
         Mat left = mat.submat(CENTER_ROI);
-        Mat right = mat.submat(RIGHT_ROI);
+        Mat right = mat.submat(LEFT_ROI);
 
 
         double leftValue = Core.sumElems(left).val[0]/CENTER_ROI.area()/255;
-        double rightValue = Core.sumElems(right).val[0]/RIGHT_ROI.area()/255;
+        double rightValue = Core.sumElems(right).val[0]/LEFT_ROI.area()/255;
 
         left.release();
         right.release();
@@ -71,7 +65,7 @@ public class SleeveDetectionRed extends OpenCvPipeline {
                 + String.valueOf(sumColors.val[1]) + " val 2 "
                 + String.valueOf(sumColors.val[2]));
 
-        Mat areaMatR = input.submat(RIGHT_ROI);
+        Mat areaMatR = input.submat(LEFT_ROI);
         Scalar sumColorsR = Core.sumElems(areaMatR);
         double minColorR = Math.min(sumColorsR.val[0], Math.min(sumColorsR.val[1], sumColorsR.val[2]));
 
@@ -92,33 +86,33 @@ public class SleeveDetectionRed extends OpenCvPipeline {
         telemetry.addData("Left percent ",Math.round(leftValue*100)+ "%");
         telemetry.addData("Right percent ",Math.round(rightValue*100)+ "%");*/
 
-        boolean stonecenter = ((sumColors.val[0] > sumColors.val[1]) && (sumColors.val[0] > sumColors.val[2]));
-        boolean stoneright = ((sumColorsR.val[0] > sumColorsR.val[1]) && (sumColorsR.val[0] > sumColorsR.val[2]));
+        boolean stonecenter = ((sumColors.val[2] > sumColors.val[0]) && (sumColors.val[2] > sumColors.val[1]));
+        boolean stoneright = ((sumColorsR.val[2] > sumColorsR.val[0]) && (sumColorsR.val[2] > sumColorsR.val[1]));
 
        /* if (stoneleft && stoneright) {
             position = ParkingPosition.RIGHT;
             telemetry.addData("Location is ", "RIGHT");
         } */
-       if (stonecenter) {
-           position = ParkingPosition.CENTER;
-           telemetry.addData("Location is ", "CENTER");
-       }
-       else if (stoneright) {
-           position = ParkingPosition.RIGHT;
-           telemetry.addData("Location is ", "RIGHT");
-       }
-       else {
-           position = ParkingPosition.LEFT;
-           telemetry.addData("Location is ", "LEFT");
-       }
-       telemetry.update();
+        if (stonecenter) {
+            position = ParkingPosition.CENTER;
+            telemetry.addData("Location is ", "CENTER");
+        }
+        else if (stoneright) {
+            position = ParkingPosition.LEFT;
+            telemetry.addData("Location is ", "LEFT");
+        }
+        else {
+            position = ParkingPosition.RIGHT;
+            telemetry.addData("Location is ", "RIGHT");
+        }
+        telemetry.update();
 
-Imgproc.cvtColor(mat,mat,Imgproc.COLOR_GRAY2RGB);
-Scalar colorstone = new Scalar(255,0,0);
-Scalar foundstone = new Scalar(0,255,0);
+        Imgproc.cvtColor(mat,mat,Imgproc.COLOR_GRAY2RGB);
+        Scalar colorstone = new Scalar(255,0,0);
+        Scalar foundstone = new Scalar(0,255,0);
 
-       Imgproc.rectangle(input,CENTER_ROI, position == ParkingPosition.CENTER? foundstone:colorstone );
-       Imgproc.rectangle(input,RIGHT_ROI, position == ParkingPosition.RIGHT? foundstone:colorstone );
+        Imgproc.rectangle(input,CENTER_ROI, position == ParkingPosition.CENTER? foundstone:colorstone );
+        Imgproc.rectangle(input,LEFT_ROI, position == ParkingPosition.LEFT? foundstone:colorstone );
 
         return input;
     }
@@ -126,7 +120,7 @@ Scalar foundstone = new Scalar(0,255,0);
     // Returns an enum being the current position where the robot will park
     public String getPosition() {
         return position.toString();
-       // return ColorV;
+        // return ColorV;
     }
 
 

@@ -30,7 +30,7 @@ public class MasterManual extends LinearOpMode {
 
         double motor_power = 0.3;
 
-        double slide_power = 0.8;
+        double slide_power = 0.9;
 
         float leftX, leftY, rightZ;
 
@@ -40,8 +40,8 @@ public class MasterManual extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         robot.init(hardwareMap);
-        robot.lClaw.setPosition(0.4);
-        robot.rClaw.setPosition(0);
+        robot.rRotate.setPosition(0.8);
+        robot.Claw.setPosition(0);
 
         //waitForStart();
         // Do not use waitForStart() if you have Motorola E4 phones.
@@ -77,37 +77,48 @@ public class MasterManual extends LinearOpMode {
                 robot.moveHolonomic(0, 0, motor_power * -1);
             } else
             if (gamepad2.dpad_left) {
-                robot.inTake.setPower(slide_power*-1);
-
+                robot.rRotate.setPosition(.1);
             }
             else  if (gamepad2.dpad_right) {
-                robot.inTake.setPower(slide_power);
-
+                robot.rRotate.setPosition(0.8);
             }
             else  if (gamepad2.dpad_up) {
                 robot.liftMotor1.setPower(slide_power);
                 robot.liftMotor2.setPower(slide_power*-1);
-
             }
             else  if (gamepad2.dpad_down) {
                 robot.liftMotor1.setPower(slide_power * -1);
                 robot.liftMotor2.setPower(slide_power);
             }
          else  if (gamepad2.x) {
-                //claw open
-                robot.lClaw.setPosition(0.4);
-                robot.rClaw.setPosition(0);
+                robot.rRotate.setPosition(0);
             } else  if (gamepad2.b) {
-                //claw close
-
-                robot.rClaw.setPosition(0.4);
-                robot.lClaw.setPosition(0);
+                robot.rRotate.setPosition(0.3);
             }
          else if (gamepad2.y){
-             robot.xDrone.setPosition(0.4);
+                robot.Claw.setPosition(.25);
             }
-            else if (gamepad2.b){
-                robot.xDrone.setPosition(0);
+            else if (gamepad2.a){
+                //   robot.rClaw.setPosition(0.0);
+                robot.Claw.setPosition(0);
+            }
+             else if (gamepad1.x){
+                robot.servoArm.setPosition(0.2);
+            }
+            else if (gamepad1.b){
+                robot.servoArm.setPosition(0);
+            }
+            else  if (gamepad2.left_bumper) {
+                robot.mHook.setPower(slide_power);
+            }
+            else  if (gamepad2.right_bumper) {
+                robot.mHook.setPower(slide_power * -1);
+            }
+            else if (gamepad1.left_bumper) {
+                robot.Drone2.setPosition(0);
+            }
+            else if (gamepad1.right_bumper) {
+                robot.Drone2.setPosition(0.3);
             }
             else{
                 robot.stopAllMotors();
